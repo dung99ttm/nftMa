@@ -16,6 +16,7 @@ const NFTCard = ({
   likeCount,
   gradient,
   onClick,
+  buyNft,
 }) => {
   const [isLike, setIsLike] = useState(false);
   const [colors, setColors] = useState([]);
@@ -50,7 +51,11 @@ const NFTCard = ({
           </div>
           <div className="buttons">
             {/* <button className="buy-now">Buy Now</button> */}
-            <Button color={Colors.buttons.primary} textContent="Buy Now" />
+            <Button
+              color={Colors.buttons.primary}
+              textContent="Buy Now"
+              onClick={buyNft}
+            />
             <div className="like-container">
               <button className="like" onClick={like}>
                 {!isLike ? (

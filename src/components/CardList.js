@@ -3,7 +3,7 @@ import NFTCard from "./NFTCard";
 import "../styles/CardList.css";
 import {useNavigate} from "react-router-dom";
 
-const CardList = ({list, type = "horizontal"}) => {
+const CardList = ({list, buyNft, type = "horizontal"}) => {
   let navigate = useNavigate();
 
   return (
@@ -15,6 +15,9 @@ const CardList = ({list, type = "horizontal"}) => {
         <NFTCard
           nftSrc={item.image}
           // nftOwner={item.owner}
+          buyNft={() => {
+            buyNft(item);
+          }}
           nftName={item.name}
           nftDescription={item.description}
           nftSeller={item.price}

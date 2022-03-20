@@ -54,6 +54,7 @@ const Home = () => {
     );
     await transaction.wait();
     loadNFTs();
+    return;
   }
 
   return (
@@ -61,7 +62,7 @@ const Home = () => {
       <Hero list={hotDropsData} />
       <p id="card-list-header-text"> Hot Drops </p>
       <div id="list-container">
-        <CardList list={nfts} />
+        <CardList list={nfts} buyNft={buyNft}/>
       </div>
     </div>
   );

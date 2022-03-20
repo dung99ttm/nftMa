@@ -45,7 +45,7 @@ contract NFTMarket is ReentrancyGuard {
   function getListingPrice() public view returns (uint256) {
     return listingPrice;
   }
-  
+
   /* Places an item for sale on the marketplace */
   function createMarketItem(
     address nftContract,
@@ -57,7 +57,7 @@ contract NFTMarket is ReentrancyGuard {
 
     _itemIds.increment();
     uint256 itemId = _itemIds.current();
-  
+
     idToMarketItem[itemId] =  MarketItem(
       itemId,
       nftContract,
@@ -107,12 +107,12 @@ contract NFTMarket is ReentrancyGuard {
 
     MarketItem[] memory items = new MarketItem[](unsoldItemCount);
     for (uint i = 0; i < itemCount; i++) {
-      if (idToMarketItem[i + 1].owner == address(0)) {
+      // if (idToMarketItem[i + 1].owner == address(0)) {
         uint currentId = i + 1;
         MarketItem storage currentItem = idToMarketItem[currentId];
         items[currentIndex] = currentItem;
         currentIndex += 1;
-      }
+      // }
     }
     return items;
   }
