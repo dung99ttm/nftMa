@@ -16,7 +16,9 @@ const NFTCard = ({
   likeCount,
   gradient,
   onClick,
-  buyNft,
+  handleNft,
+  myNFT,
+  listing,
 }) => {
   const [isLike, setIsLike] = useState(false);
   const [colors, setColors] = useState([]);
@@ -26,18 +28,18 @@ const NFTCard = ({
   const getColors = (colors) => {
     setColors((c) => [...c, ...colors]);
   };
+
   return (
     <Card
       blurColor={colors[0]}
-      onClick={onClick}
       child={
         <>
           <ColorExtractor getColors={getColors}>
-            <img className="nft-image" src={nftSrc} />
+            <img className="nft-image" src={nftSrc} onClick={onClick} />
           </ColorExtractor>
           <div className="wrapper">
             <div className="info-container">
-              <p className="owner">{nftOwner}</p>
+              <p className="owner">'''</p>
               <p className="name">{nftName}</p>
             </div>
 
@@ -49,33 +51,12 @@ const NFTCard = ({
               </p>
             </div>
           </div>
-          <div className="buttons">
-            {/* <button className="buy-now">Buy Now</button> */}
+          <div className="buttons" style={listing ? {display: "none"} : {}}>
             <Button
               color={Colors.buttons.primary}
-              textContent="Buy Now"
-              onClick={buyNft}
+              textContent={myNFT ? "Listing" : "Buy Now"}
+              onClick={handleNft}
             />
-            <div className="like-container">
-              <button className="like" onClick={like}>
-                {!isLike ? (
-                  <AiOutlineHeart size="30" color="white" />
-                ) : (
-                  <AiFillHeart
-                    size="30"
-                    style={{
-                      stroke: `-webkit-linear-gradient(
-                    to bottom,
-                    #38ef7d,
-                    #11998e
-                  );`,
-                    }}
-                    color="#00f5c966"
-                  />
-                )}
-              </button>
-              <p className="like-count">123</p>
-            </div>
           </div>
         </>
       }

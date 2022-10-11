@@ -11,7 +11,6 @@ const Accordion = ({child}) => {
   const open = () => {
     if (!isOpen) {
       setOpen(!isOpen);
-      console.log(child);
       accordionRef.current.style.height = "auto";
     } else {
       setOpen(!isOpen);

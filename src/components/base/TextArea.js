@@ -7,6 +7,9 @@ const TextInput = ({
   placeholder = "default input",
   icon,
   type,
+  onChange,
+  defaultValue,
+  readOnly = false
 }) => {
   return (
     <div className="search-wrapper-area">
@@ -23,7 +26,7 @@ const TextInput = ({
                 )`,
         }}
       >
-        <textarea id="search-area" placeholder={placeholder} type={type} />
+        <textarea id="search-area" placeholder={placeholder} type={type} onChange={onChange} defaultValue={defaultValue} readOnly={readOnly}/>
         {icon}
       </div>
     </div>

@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: MIT OR Apache-2.0
 pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -20,9 +19,20 @@ contract NFT is ERC721URIStorage {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
 
+        console.log('nft', newItemId);
+        console.log(msg.sender);
+        console.log(contractAddress);
+
         _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
         setApprovalForAll(contractAddress, true);
         return newItemId;
+    }
+
+    function giveResaleApproval(uint256 tokenId) public {
+        require(ownerOf(tokenId) == msg.sender, "You must own this NFT in order to resell it" );
+        setApprovalForAll(contractAddress, true);
+
+        return;
     }
 }

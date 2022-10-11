@@ -1,10 +1,19 @@
-import React from "react";
 import NFTCard from "./NFTCard";
 import "../styles/CardList.css";
 import {useNavigate} from "react-router-dom";
 
-const CardList = ({list, buyNft, type = "horizontal"}) => {
-  let navigate = useNavigate();
+const CardList = ({
+  list,
+  buyNft,
+  type = "horizontal",
+  myNFT = false,
+  listing = false,
+}) => {
+  const navigate = useNavigate();
+
+  const handleNft = (item) => {
+    !myNFT ? buyNft(item) : navigate("/resell", {state: {item: item}});
+  };
 
   return (
     <div
@@ -14,10 +23,9 @@ const CardList = ({list, buyNft, type = "horizontal"}) => {
       {list.map((item) => (
         <NFTCard
           nftSrc={item.image}
-          // nftOwner={item.owner}
-          buyNft={() => {
-            buyNft(item);
-          }}
+          handleNft={() => handleNft(item)}
+          myNFT={myNFT}
+          listing={listing}
           nftName={item.name}
           nftDescription={item.description}
           nftSeller={item.price}

@@ -38,6 +38,31 @@
   border-radius: 30px;
 }
 
+#search-area::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color: #eeeeee;
+}
+#search-area:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+ color: #eeeeee;
+ opacity:  1;
+}
+#search-area::-moz-placeholder { /* Mozilla Firefox 19+ */
+ color: #eeeeee;
+ opacity:  1;
+}
+#search-area:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: #eeeeee;
+}
+#search-area::-ms-input-placeholder { /* Microsoft Edge */
+ color: #eeeeee;
+}
+
+#search-area::placeholder { /* Most modern browsers support this now. */
+ color: #eeeeee;
+}
+#search-area:focus {
+  outline: none;
+}
+
 #search-area:focus {
   outline: none;
 }

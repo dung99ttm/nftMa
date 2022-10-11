@@ -7,7 +7,11 @@ const TextInput = ({
   placeholder = "default input",
   icon,
   type,
+  onChange,
+  defaultValue,
+  readOnly = false
 }) => {
+  console.log(readOnly);
   return (
     <div className="search-wrapper">
       <div
@@ -23,7 +27,7 @@ const TextInput = ({
                 )`,
         }}
       >
-        <input id="search" placeholder={placeholder} type={type} />
+        <input id="search" placeholder={placeholder} type={type} onChange={onChange} defaultValue={defaultValue} readOnly={readOnly}/>
         {icon}
       </div>
     </div>

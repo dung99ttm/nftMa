@@ -38,10 +38,9 @@ const NFTDetail = () => {
               <ColorExtractor getColors={getColors}>
                 <img id="detail-image" src={state.item.image} />
               </ColorExtractor>
-
               <div id="detail-info">
                 <div id="detail-info-container">
-                  <p id="collection"> {state.item.name} </p>
+                  {/* <p id="collection"> {state.item.name} </p> */}
                   <p id="name"> {state.item.name} </p>
                   <p id="description"> {state.item.description} </p>
                 </div>
@@ -57,26 +56,6 @@ const NFTDetail = () => {
                       </div>
                     }
                   ></Button>
-                  <div className="like-container">
-                    <button className="like" onClick={like}>
-                      {!isLike ? (
-                        <AiOutlineHeart size="45" color="white" />
-                      ) : (
-                        <AiFillHeart
-                          size="45"
-                          style={{
-                            stroke: `-webkit-linear-gradient(
-                    to bottom,
-                    #38ef7d,
-                    #11998e
-                  );`,
-                          }}
-                          color="#00f5c966"
-                        />
-                      )}
-                    </button>
-                    <p className="like-count">123</p>
-                  </div>
                 </div>
               </div>
             </div>

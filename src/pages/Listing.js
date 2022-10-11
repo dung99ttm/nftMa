@@ -2,38 +2,25 @@ import {useEffect, useState, useContext} from "react";
 import CardList from "../components/CardList";
 import "../styles/Explore.css";
 import Header from "../components/Header";
-import TextInput from "../components/base/TextInput";
 import axios from "axios";
-import Web3Modal from "web3modal";
 import {ethers} from "ethers";
-import {nftaddress} from "../config";
 import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../artifacts/contracts/Market.sol/NFTMarket.json";
 import {ProviderContext} from "../providers/DappProvider";
-import {AiOutlineSearch} from "react-icons/ai";
+import {useLocation} from "react-router";
 
-const Explore = () => {
+const Listing = () => {
   const [nfts, setNfts] = useState([]);
-  const [nftsSearch, setNftsSearch] = useState([]);
-  const [search, setSearch] = useState("");
   const [loadingState, setLoadingState] = useState("not-loaded");
   const {contractNft, contractNftMarket} = useContext(ProviderContext);
+  const location = useLocation();
 
   useEffect(() => {
     contractNftMarket && loadNFTs();
   }, [contractNftMarket]);
 
-  useEffect(() => {
-    if (search === "") {
-      setNfts(nftsSearch);
-    } else {
-      const itemsFilter = nftsSearch.filter((nft) => nft?.name.startsWith(search));
-      setNfts(itemsFilter);
-    }
-  }, [search]);
-
   const loadNFTs = async () => {
-    const data = await contractNftMarket.fetchMarketItems();
+    const data = await contractNftMarket.fetchItemsListed();
 
     const items = await Promise.all(
       data.map(async (i) => {
@@ -45,6 +32,7 @@ const Explore = () => {
           itemId: i.itemId.toNumber(),
           seller: i.seller,
           owner: i.owner,
+          tokenId: i.tokenId,
           image: meta.data.image,
           name: meta.data.name,
           description: meta.data.description,
@@ -53,38 +41,21 @@ const Explore = () => {
       })
     );
     setNfts(items);
-    setNftsSearch(items);
     setLoadingState("loaded");
   };
 
-  async function buyNft(nft) {
-    const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-    const transaction = await contractNftMarket.createMarketSale(
-      nftaddress,
-      nft.itemId,
-      {
-        value: price,
-      }
-    );
-    await transaction.wait();
-    loadNFTs();
-    return;
-  }
-
   return (
-    <div id="explore">
+    <div id="MyNFT">
       <Header />
       <div style={{height: "95px"}}></div>
-      <TextInput
-        placeholder="Explore NFTs"
-        icon={<AiOutlineSearch size="30" color="rgba(48,118,234,1)" />}
-        onChange={(e) => setSearch(e.target.value)}
-      />
       <div id="list-container">
-        <CardList list={nfts} buyNft={buyNft}/>
+        <CardList
+          list={nfts}
+          listing={true}
+        />
       </div>
     </div>
   );
 };
 
-export default Explore;
+export default Listing;

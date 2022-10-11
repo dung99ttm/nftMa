@@ -3,7 +3,6 @@ import Hero from "../components/Hero";
 import "../styles/Home.css";
 import CardList from "../components/CardList";
 import axios from "axios";
-import Web3Modal from "web3modal";
 import {ethers} from "ethers";
 import {nftaddress} from "../config";
 import {hotDropsData} from "../constants/MockupData";
@@ -38,7 +37,6 @@ const Home = () => {
         return item;
       })
     );
-    console.log(items);
     setNfts(items);
     setLoadingState("loaded");
   };

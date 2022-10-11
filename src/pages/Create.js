@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from "react";
+import {useState, useEffect, useContext, useRef} from "react";
 import Button from "../components/base/Button";
 import Card from "../components/base/Card";
 import Select from "../components/base/Select";
@@ -14,17 +14,21 @@ import {ethers} from "ethers";
 import {create as ipfsHttpClient} from "ipfs-http-client";
 import {nftaddress} from "../config";
 import {ProviderContext} from "../providers/DappProvider";
+import imageEmpty from "../assets/inputImage.png";
+import {useNavigate} from "react-router-dom";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 const Create = () => {
   const {contractNft, contractNftMarket} = useContext(ProviderContext);
-
+  const inputImage = useRef(null);
   const isMobile = useMobile();
+  const navigate = useNavigate();
   const [colors, setColors] = useState([]);
   const [fileUrl, setFileUrl] = useState(null);
+
   const [formInput, updateFormInput] = useState({
-    price: "10",
+    price: "0.1",
     name: "Abc",
     description: "hahahahah",
   });
@@ -32,6 +36,7 @@ const Create = () => {
   const getColors = (colors) => {
     setColors((c) => [...c, ...colors]);
   };
+
   const {state} = useLocation();
 
   useEffect(() => {
@@ -61,11 +66,10 @@ const Create = () => {
       description,
       image: fileUrl,
     });
-    console.log("data ===", data);
+
     try {
       const added = await client.add(data);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-      console.log("url ===", url);
       createSale(url);
     } catch (error) {
       console.log("Error uploading file: ", error);
@@ -73,16 +77,10 @@ const Create = () => {
   }
 
   async function createSale(url) {
-    console.log(contractNft);
-    console.log(contractNft);
-
-    // return;
     let transaction = await contractNft.createToken(url);
     let tx = await transaction.wait();
-    console.log(tx);
 
     let event = tx.events[0];
-    console.log(event);
     let value = event.args[2];
     let tokenId = value.toNumber();
     const price = ethers.utils.parseUnits(formInput.price, "ether");
@@ -98,6 +96,8 @@ const Create = () => {
       }
     );
     await transaction.wait();
+    navigate("/");
+
   }
 
   return (
@@ -113,19 +113,25 @@ const Create = () => {
               <input
                 type="file"
                 name="Asset"
+                ref={inputImage}
                 className="my-4"
                 onChange={onChange}
-                // style={{display: "none"}}
+                style={{display: "none"}}
               />
-              {fileUrl && (
+              {fileUrl ? (
                 <ColorExtractor getColors={getColors}>
                   <img id="detail-image" src={fileUrl} />
                 </ColorExtractor>
+              ) : (
+                <ColorExtractor getColors={getColors}>
+                  <img
+                    id="detail-image"
+                    src={imageEmpty}
+                    onClick={() => inputImage.current.click()}
+                  />
+                </ColorExtractor>
               )}
-              {/* <ColorExtractor getColors={getColors}>
-                <img id="detail-image" src={fileUrl} />
-              </ColorExtractor> */}
-              <div id="detail-info" style={{}}>
+              <div id="detail-info">
                 <div id="detail-info-container">
                   <p id="name"> {"Name"} </p>
                   <TextInput
@@ -138,7 +144,7 @@ const Create = () => {
                   <p id="description-c">{"Description"}</p>
                   <TextArea
                     width="80%"
-                    height="30vh"
+                    height="25vh"
                     onChange={(e) =>
                       updateFormInput({
                         ...formInput,
@@ -146,27 +152,21 @@ const Create = () => {
                       })
                     }
                   />
-                  {/* <p id="collection-c">{"Collection"}</p>
-                  <Select items={["test1", "test2", "test3"]}/> */}
+                  <p id="description-c">{"Price"}</p>
+                  <TextInput
+                    width="80%"
+                    height="30px"
+                    onChange={(e) =>
+                      updateFormInput({
+                        ...formInput,
+                        price: e.target.value,
+                      })
+                    }
+                  />
                 </div>
                 <div id="detail-controls">
                   <Button
-                    width={isMobile ? "70%" : "70%"}
-                    height="50px"
-                    // onChange={(e) =>
-                    //   updateFormInput({...formInput, price: e.target.value})
-                    // }
-                    child={
-                      <div id="button-child">
-                        <FaEthereum size="28px" />
-                        <p id="price">1254</p>
-                      </div>
-                    }
-                  ></Button>
-                </div>
-                <div id="detail-controls" mt="2px">
-                  <Button
-                    width={isMobile ? "70%" : "70%"}
+                    width={isMobile ? "70%" : "80%"}
                     height="50px"
                     onClick={createMarket}
                     child={
